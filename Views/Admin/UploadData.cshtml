@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "UploadData";
+}
+
+<h2>Upload Products</h2>
+@if (ViewBag.Message != null || ViewBag.MessageError != null )
+{
+<div class="form-group">
+    <div class="col-md-10" style="font-size:20px; color:#3cb371">@ViewBag.Message</div><br>
+    <div class="col-md-10" style="font-size:20px; color:#ff0000">@ViewBag.MessageError</div><br>
+</div>
+}
+@using (Html.BeginForm("UploadData", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="UploadedFile" /> <br>
+    <input type="submit" value="Import" /> 
+   
+}
+<br><br><br>
+
+<footer>
+    <a href="@Url.Action("ProductList", "Admin")" class="btn btn-default">Back to Products</a>
+</footer>
+

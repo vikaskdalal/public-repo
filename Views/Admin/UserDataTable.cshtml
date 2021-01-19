@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ShoppingSite.Models.User>
+
+@{
+    ViewBag.Title = "UserDataTable";
+}
+<h2>Users Data</h2>
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#tblUser").DataTable({
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "orderMulti": false, // for disable multiple column at once
+                "ajax": {
+                    "url": "/Admin/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "UserId", "name": "UserId", "autoWidth": true },
+                    { "data": "UserName", "name": "UserName", "autoWidth": true },
+                    { "data": "Email", "name": "Email", "autoWidth": true },
+                    { "data": "UserType", "name": "UserType", "autoWidth": true },
+                ]
+            });
+        });
+    </script>
+}
+
+<table id="tblUser">
+    <thead class="cf">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserType)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserType)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+

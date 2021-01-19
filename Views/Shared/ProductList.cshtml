@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ShoppingSite.Models.Product>
+
+@{
+    ViewBag.Title = "ProductList";
+}
+
+<h2>Product List</h2>
+
+@if (TempData["Message"] != null || TempData["MessageRemove"] != null )
+{
+<div class="form-group">
+    <div class="col-md-10" style="font-size:20px; color:#3cb371;">@TempData["Message"]</div><br>
+    <div class="col-md-10" style="font-size:20px; color:#ff0000;">@TempData["MessageRemove"]</div><br>
+</div>
+}
+
+@if (Session["UserType"].Equals("Admin"))
+{
+    <h3>  @Html.ActionLink("Add Product", "AddProduct", "Admin", new { @class = "btn btn-success"  }) </h3>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DiscountPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdditionalDiscount)
+        </th>
+        <th>
+            @if (Session["UserType"].Equals("Admin"))
+            {
+                @Html.DisplayNameFor(model => model.IsVisible)
+            }
+        </th>
+        <th>
+            @Html.Label("Action", "Action")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalDiscount)
+            </td>
+            <td>
+                @if (Session["UserType"].Equals("Admin"))
+                {
+                    @Html.DisplayFor(modelItem => item.IsVisible)
+                }
+            </td>
+            <td>
+
+                @if (Session["UserType"].Equals("Admin"))
+                {
+                    @Html.ActionLink("Edit", "Edit", "Admin", new { id = item.ProductId }, new { @class = "btn btn-success" }) ; @:&nbsp;
+                    @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.ProductId }, new { @class = "btn btn-danger" }) ; @:&nbsp;
+
+                }
+                @{
+
+                    if (ViewBag.alreadyInCart.Contains(item.ProductId))
+                    {
+                        <button id="btn_add" class="btn btn-info glyphicon glyphicon-shopping-cart" disabled>AddedToCart</button>
+                    }
+                    else
+                    {
+                        if (Session["UserType"].Equals("Admin"))
+                        {
+                            <a id="btn_add" href="@Url.Action("AddCart", "Admin", new { id = item.ProductId} )" class="btn btn-info">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> AddToCart
+                            </a>
+                        }
+                        else
+                        {
+                            <a id="btn_add" href="@Url.Action("AddCart", "Users", new { id = item.ProductId} )" class="btn btn-info">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> AddToCart
+                            </a>
+                        }
+                    }
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>

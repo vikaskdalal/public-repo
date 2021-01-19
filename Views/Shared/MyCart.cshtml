@@ -1,0 +1,105 @@
+﻿@model IEnumerable<ShoppingSite.Models.Product>
+@{
+    ViewBag.Title = "MyCart";
+}
+
+<h2>My Cart</h2>
+@if (TempData["Message"] != null)
+{
+    <div class="form-group">
+        <div class="col-md-10" style="font-size:20px; color:#ff0000;" >@TempData["Message"]</div><br>
+    </div>
+}
+<link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+}
+<script>
+    $(document).ready(function () {
+        $("#tblMyCart").DataTable();
+    });
+</script>
+@{
+    ViewBag.sum = 0;
+}
+<table class="table" id="tblMyCart">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdditionalDiscount)
+            </th>
+            <th>
+                @Html.Label("Effective_Price", "Effective_Price")
+            </th>
+            <th>
+                @Html.Label("Action", "Action")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdditionalDiscount)
+                    </td>
+                    @{
+                        ViewBag.effectivePrice = item.ProductPrice - (item.ProductPrice * (item.DiscountPrice / 100)) - (item.ProductPrice * (item.AdditionalDiscount / 100));
+                        ViewBag.sum = ViewBag.effectivePrice + ViewBag.sum;
+                    }
+                    <td>
+                        @ViewBag.effectivePrice
+                    </td>
+                    <td>
+                        @Html.ActionLink("Remove", "RemoveFromCart", new { id = item.ProductId }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+        }
+
+        else
+        {
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td> Total Effective price = @ViewBag.sum  </td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
